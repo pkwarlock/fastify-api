@@ -1,0 +1,18 @@
+{
+  "name": "fastify",
+  "version": "1.0.0",
+  "description": "For test and loab log on Azure Prometheus and Grafana Azure ",
+  "main": "index.js",
+  "scripts": {
+    "start": "cross-env NODE_ENV=production node app",
+    "dev": "cross-env NODE_ENV=development nodemon app"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cross-env": "^7.0.3",
+    "fastify": "^4.13.0",
+    "fastify-metrics": "^10.0.3",
+    "nodemon": "^2.0.20"
+  }
+}
