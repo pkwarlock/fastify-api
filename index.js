@@ -1,10 +1,31 @@
-const fastify = require('fastify');
-const app = fastify({
-    logger: true
+const { oneLineLogger } = require('@fastify/one-line-logger');
+const fastify = require('fastify')({
+  logger: {
+    enabled: true,
+    level: "debug",
+    
+  },
 });
 const metricsPlugin = require('fastify-metrics');
+const Autoload = require('@fastify/autoload');
+const path = require("path");
+const swagger = require('./src/config/swagger')
+// const config = require('./src/config/config')
+// Register Swagger
+fastify.register(require('@fastify/swagger'),swagger.options)
+fastify.register(require('@fastify/swagger-ui'), swagger.ui_options)
+// app.register(require('@fastify/jwt'), {secret: config.JWTsecret})
+fastify.register(require('@fastify/cors'), {
+    origin: '*',
+    method: 'GET,POST'
+})
 
-app.register(metricsPlugin, {endpoint: '/metrics', 
+fastify.register(Autoload, {
+  dir: path.join(__dirname, 'src/routes')
+})
+
+
+fastify.register(metricsPlugin, {endpoint: '/metrics', 
   routeMetrics: {
     overrides: {
       histogram: {
@@ -21,15 +42,15 @@ app.register(metricsPlugin, {endpoint: '/metrics',
 });
 
 
-app.get('/', function (request, reply) {
-    reply.send({ hello: 'world' })
-  })
-  
-  // Run the server!
-app.listen({port: 3000,host: "0.0.0.0"}, function (err, address) {
-    if (err) {
-        fastify.log.error(err)
-        process.exit(1)
-    }
-// Server is now listening on ${address}
-})
+// Run the server!
+const start = async () => {
+  try {
+      await fastify.listen({port: 3000,host: "0.0.0.0"})
+      fastify.swagger()
+      fastify.log.info(`server listening on ${fastify.server.address().port}`)
+  } catch (err) {
+      fastify.log.error(err)
+      process.exit(1)
+  }
+}
+start()
