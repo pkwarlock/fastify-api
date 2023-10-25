@@ -1,20 +1,11 @@
+const userController = require('../../controllers/userController')
 module.exports = async function (fastify) {
   fastify.route({
     method: 'GET',
     path: '/admin/:username',
+    
     // preHandler: [hook.verifyToken],
-    handler: function (request, reply) {
-      var { username } = request.params
-      console.log(request.params)
-      // reply.send({ "hello": username })
-      reply
-      .code(200)
-      .send({
-          "statusCode": 200,
-          "message": "Successful login",
-          "username": username
-      })
-    },
+    handler: userController.getAdmin,
     schema: {
       tags: ["v1"],
       description: 'post some data',
@@ -76,9 +67,7 @@ module.exports = async function (fastify) {
     method: 'GET',
     path: '/admin/getAllAdmin',
     // preHandler: [hook.verifyToken],
-    handler: function (request, reply) {
-      reply.send({ hello: 'world' })
-    },
+    handler: userController.getAllAdmin,
     schema: {
       tags: ["v1"],
       description: 'Get All Admin Services',
@@ -129,9 +118,7 @@ module.exports = async function (fastify) {
   fastify.route({
     method: 'POST',
     path: '/admin/addAdmin',
-    handler: function (request, reply) {
-      reply.send({ hello: 'world' })
-    },
+    handler: userController.addAdmin,
     schema: {
       tags: ["v1"],
       body: {
@@ -152,9 +139,7 @@ module.exports = async function (fastify) {
   fastify.route({
     method: 'POST',
     path: '/admin/removeAdmin',
-    handler: function (request, reply) {
-      reply.send({ hello: 'world' })
-    },
+    handler: userController.removeAdmin,
     schema: {
       tags: ["v1"],
       body: {
@@ -194,9 +179,7 @@ module.exports = async function (fastify) {
   fastify.route({
     method: 'POST',
     path: '/admin/login',
-    handler: function (request, reply) {
-      reply.send({ hello: 'world' })
-    },
+    handler: userController.adminLogin,
     schema: {
       tags: ["v1"],
       body: {

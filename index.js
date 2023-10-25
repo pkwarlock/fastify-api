@@ -1,51 +1,55 @@
 const { oneLineLogger } = require('@fastify/one-line-logger');
+const mongoose = require('mongoose')
 const fastify = require('fastify')({
   logger: {
-    enabled: true,
-    level: "debug",
-    
+    level: 'info',
+    transport: {
+      target: 'pino-pretty'
+    },
+    serializers: {
+      res (reply) {
+        // The default
+        return {
+          statusCode: reply.statusCode,
+          message: reply.message
+        }
+      },
+      req (request) {
+        return {
+          method: request.method,
+          url: request.url,
+          path: request.routerPath,
+          parameters: request.params,
+          // Including the headers in the log could be in violation
+          // of privacy laws, e.g. GDPR. You should use the "redact" option to
+          // remove sensitive fields. It could also leak authentication data in
+          // the logs.
+          headers: request.headers
+        };
+      }
+    }
   },
 });
-const metricsPlugin = require('fastify-metrics');
 const Autoload = require('@fastify/autoload');
 const path = require("path");
-const swagger = require('./src/config/swagger')
-// const config = require('./src/config/config')
-// Register Swagger
-fastify.register(require('@fastify/swagger'),swagger.options)
-fastify.register(require('@fastify/swagger-ui'), swagger.ui_options)
-// app.register(require('@fastify/jwt'), {secret: config.JWTsecret})
-fastify.register(require('@fastify/cors'), {
-    origin: '*',
-    method: 'GET,POST'
-})
+const config = require('./src/config/config')
 
+fastify.register(Autoload, {
+  dir: path.join(__dirname, 'src/plugins')
+})
 fastify.register(Autoload, {
   dir: path.join(__dirname, 'src/routes')
 })
 
 
-fastify.register(metricsPlugin, {endpoint: '/metrics', 
-  routeMetrics: {
-    overrides: {
-      histogram: {
-        name: 'my_custom_http_request_duration_seconds',
-        buckets: [0.1, 0.5, 1, 3, 5],
-      },
-      summary: {
-        help: 'custom request duration in seconds summary help',
-        labelNames: ['status_code', 'method', 'route'],
-        percentiles: [0.5, 0.75, 0.9, 0.95, 0.99],
-      },
-    }
-  }
-});
-
-
+// console.log(config.mongoUri)
+mongoose.connect(config.config.mongoUri, { useNewUrlParser: true })
+    .then(() => console.log('MongoDB connected… => ', config.config.mongoUri))
+    .catch(err => console.log(err.message, "mongo URI => ", process.env.MONGO_URI))
 // Run the server!
 const start = async () => {
   try {
-      await fastify.listen({port: 3000,host: "0.0.0.0"})
+      await fastify.listen({port: 8000,host: "0.0.0.0"})
       fastify.swagger()
       fastify.log.info(`server listening on ${fastify.server.address().port}`)
   } catch (err) {
