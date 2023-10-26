@@ -7,21 +7,9 @@ const mongoose = require('mongoose');
 // const bcrypt = require('fastify-bcrypt');
 
 const getAdmin = async (request, reply) => {
-    const { params } = request
-    console.log(params)
-    // const admin = await Admin.findOne({ username: params.username, isDelete: false })
-    const {
-        activeSpan,
-        tracer,
-        // context,
-        // extract,
-        // inject,
-      } = request.openTelemetry()
-      if (admin) {
-        // Spans started in a wrapped route will automatically be children of the activeSpan.
-        const childSpan = tracer.startSpan(`${activeSpan.name} - child process`)
-        // doSomeWork()
-        childSpan.end()
+    const { admin } = request.params
+    if (admin) {
+        console.log(admin)
         reply
             .code(200)
             .send(admin)
