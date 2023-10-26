@@ -115,102 +115,102 @@ module.exports = async function (fastify) {
     }
   })
 
-  fastify.route({
-    method: 'POST',
-    path: '/admin/addAdmin',
-    handler: userController.addAdmin,
-    schema: {
-      tags: ["v1"],
-      body: {
-        type: 'object',
-        properties: {
-          username: { type: 'string' },
-          password: { type: 'string' },
-          firstName: { type: 'string' },
-          lastName: { type: 'string' },
-          image: { type: 'string' },
-          email: { type: 'string' },
-          role: { type: 'string' }
-        }
-      }
-    }
-  })
+  // fastify.route({
+  //   method: 'POST',
+  //   path: '/admin/addAdmin',
+  //   handler: userController.addAdmin,
+  //   schema: {
+  //     tags: ["v1"],
+  //     body: {
+  //       type: 'object',
+  //       properties: {
+  //         username: { type: 'string' },
+  //         password: { type: 'string' },
+  //         firstName: { type: 'string' },
+  //         lastName: { type: 'string' },
+  //         image: { type: 'string' },
+  //         email: { type: 'string' },
+  //         role: { type: 'string' }
+  //       }
+  //     }
+  //   }
+  // })
 
-  fastify.route({
-    method: 'POST',
-    path: '/admin/removeAdmin',
-    handler: userController.removeAdmin,
-    schema: {
-      tags: ["v1"],
-      body: {
-        type: 'object',
-        properties: {
-          _id: { type: 'string' },
-          username: { type: 'string' },
-          password: { type: 'string' },
-          firstName: { type: 'string' },
-          lastName: { type: 'string' },
-          image: { type: 'string' },
-          email: { type: 'string' },
-          role: { type: 'string' }
-        }
-      },
-      response: {
-        200: {
-          description: 'Successful response',
-          type: 'object',
-          properties: {
-            statusCode: { type: 'number' },
-            message: { type: 'string' }
-          }
-        },
-        default: {
-          description: 'Default response',
-          type: 'object',
-          properties: {
-            statusCode: { type: 'number' },
-            message: { type: 'string' }
-          }
-        }
-      }
-    }
-  })
+  // fastify.route({
+  //   method: 'POST',
+  //   path: '/admin/removeAdmin',
+  //   handler: userController.removeAdmin,
+  //   schema: {
+  //     tags: ["v1"],
+  //     body: {
+  //       type: 'object',
+  //       properties: {
+  //         _id: { type: 'string' },
+  //         username: { type: 'string' },
+  //         password: { type: 'string' },
+  //         firstName: { type: 'string' },
+  //         lastName: { type: 'string' },
+  //         image: { type: 'string' },
+  //         email: { type: 'string' },
+  //         role: { type: 'string' }
+  //       }
+  //     },
+  //     response: {
+  //       200: {
+  //         description: 'Successful response',
+  //         type: 'object',
+  //         properties: {
+  //           statusCode: { type: 'number' },
+  //           message: { type: 'string' }
+  //         }
+  //       },
+  //       default: {
+  //         description: 'Default response',
+  //         type: 'object',
+  //         properties: {
+  //           statusCode: { type: 'number' },
+  //           message: { type: 'string' }
+  //         }
+  //       }
+  //     }
+  //   }
+  // })
 
-  fastify.route({
-    method: 'POST',
-    path: '/admin/login',
-    handler: userController.adminLogin,
-    schema: {
-      tags: ["v1"],
-      body: {
-        type: 'object',
-        properties: {
-          username: { type: 'string' },
-          password: { type: 'string' }
-        }
-      },
-      response: {
-        200: {
-          description: 'Successful response',
-          type: 'object',
-          properties: {
-            statusCode: { type: 'number' },
-            message: { type: 'string' },
-            token: { type: 'string' }
-          }
-        },
-        default: {
-          description: 'Default response',
-          type: 'object',
-          properties: {
-            statusCode: { type: 'number' },
-            message: { type: 'string' },
-            token: { type: 'string' }
-          }
-        }
-      }
-    }
-  })
+  // fastify.route({
+  //   method: 'POST',
+  //   path: '/admin/login',
+  //   handler: userController.adminLogin,
+  //   schema: {
+  //     tags: ["v1"],
+  //     body: {
+  //       type: 'object',
+  //       properties: {
+  //         username: { type: 'string' },
+  //         password: { type: 'string' }
+  //       }
+  //     },
+  //     response: {
+  //       200: {
+  //         description: 'Successful response',
+  //         type: 'object',
+  //         properties: {
+  //           statusCode: { type: 'number' },
+  //           message: { type: 'string' },
+  //           token: { type: 'string' }
+  //         }
+  //       },
+  //       default: {
+  //         description: 'Default response',
+  //         type: 'object',
+  //         properties: {
+  //           statusCode: { type: 'number' },
+  //           message: { type: 'string' },
+  //           token: { type: 'string' }
+  //         }
+  //       }
+  //     }
+  //   }
+  // })
 
   fastify.route({
     method: 'POST',
