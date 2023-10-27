@@ -28,16 +28,17 @@ const provider = new NodeTracerProvider({resource: new Resource({
 provider.register();
 
 fastify.addHook('onRequest', (request, reply, done) => {
+  const {origin} = request.headers
   const sdk = new opentelemetry.NodeSDK({
     traceExporter: new OTLPTraceExporter({
       // optional - default url is http://localhost:4318/v1/traces
-      url: '<your-otlp-endpoint>/v1/traces',
+      url: 'http://localhost:16686/v1/traces',
       // optional - collection of custom headers to be sent with each request, empty by default
-      headers: {},
+      headers: { origin : origin},
     }),
     
     instrumentations: [
-      getNodeAutoInstrumentations(),
+      // getNodeAutoInstrumentations(),
       new HttpInstrumentation(),
       new FastifyInstrumentation(),
     ],

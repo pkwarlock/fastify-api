@@ -29,7 +29,7 @@ const fastify = require('fastify')({
 });
 const Autoload = require('@fastify/autoload');
 const path = require("path");
-// const config = require('./src/config/config')
+const config = require('./src/config/config')
 
 const swagger = require('./src/config/swagger')
 fastify.register(require('@fastify/swagger'), swagger.options)
@@ -44,9 +44,9 @@ fastify.register(Autoload, {
 
 
 // // console.log(config.mongoUri)
-// mongoose.connect(config.config.mongoUri, { useNewUrlParser: true })
-//     .then(() => console.log('MongoDB connected… => ', config.config.mongoUri))
-//     .catch(err => console.log(err.message, "mongo URI => ", process.env.MONGO_URI))
+mongoose.connect(config.config.mongoUri, { useNewUrlParser: true })
+    .then(() => console.log('MongoDB connected… => ', config.config.mongoUri))
+    .catch(err => console.log(err.message, "mongo URI => ", process.env.MONGO_URI))
 // Run the server!
 const start = async () => {
   try {

@@ -23,14 +23,14 @@ const getAdmin = async (request, reply) => {
     }
 }
 const getAllAdmin = async (request, reply) => {
-    const {admin} = request.params
+    const admin = await Admin.find({ isDelete: false })
     reply.send(admin)
 }
 
 const addAdmin = async (request, reply) => {
     const { body } = request
     body.password = await generatePassword(body.password)
-    // const admin = await Admin.create(body)
+    const admin = await Admin.create(body)
     reply.send('Admin created')
 }
 
@@ -67,34 +67,34 @@ const addAdmin = async (request, reply) => {
 //     }
 // }
 
-// const adminLogin = async (request, reply) => {
-//     const { username, password } = request.body
-//     const admin = await Admin.findOne({ username })
-//     if (!admin) {
-//         throw new Error('Unauthorized')
-//     }
-//     await comparePasswords(password, admin.password)
-//     /* 
-//     JWT token return for admin account
-//     */
-//     const token = jwt.sign({
-//         id: admin.id,
-//         role: admin.role,
-//         name: admin.firstName
-//     }, config.config.JWTsecret, {
-//         expiresIn: 6400
-//     })
+const adminLogin = async (request, reply) => {
+    const { username, password } = request.body
+    const admin = await Admin.findOne({ username })
+    if (!admin) {
+        throw new Error('Unauthorized')
+    }
+    await comparePasswords(password, admin.password)
+    /* 
+    JWT token return for admin account
+    */
+    const token = jwt.sign({
+        id: admin.id,
+        role: admin.role,
+        name: admin.firstName
+    }, config.config.JWTsecret, {
+        expiresIn: 6400
+    })
 
-//     reply
-//         .code(200)
-//         .send({
-//             "statusCode": 200,
-//             "message": "Successful login",
-//             "token": token
-//         })
+    reply
+        .code(200)
+        .send({
+            "statusCode": 200,
+            "message": "Successful login",
+            "token": token
+        })
 
 
-// }
+}
 
 const comparePasswords = async (password, existsPassword) => {
     console.log(password)
@@ -119,6 +119,6 @@ module.exports = {
     getAdmin,
     addAdmin,
     // removeAdmin,
-    // adminLogin,
+    adminLogin,
     getAllAdmin
 }
