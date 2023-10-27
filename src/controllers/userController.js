@@ -1,13 +1,15 @@
 const Admin = require('../models/User')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const config = require('../config/config')
+const {config} = require('../config/config')
 const mongoose = require('mongoose');
 // const { default: fastifyBcrypt } = require('fastify-bcrypt');
 // const bcrypt = require('fastify-bcrypt');
 
 const getAdmin = async (request, reply) => {
-    const { admin } = request.params
+    const { params } = request
+    console.log(params)
+    const admin = await Admin.findOne({ username: params.username, isDelete: false })
     if (admin) {
         console.log(admin)
         reply
@@ -81,7 +83,7 @@ const adminLogin = async (request, reply) => {
         id: admin.id,
         role: admin.role,
         name: admin.firstName
-    }, config.config.JWTsecret, {
+    }, config.JWTsecret, {
         expiresIn: 6400
     })
 

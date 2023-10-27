@@ -3,6 +3,13 @@ const mongoose = require('mongoose')
 const fastify = require('fastify')({
   logger: {
     level: 'info',
+    transport: {
+      target: 'pino-pretty',
+      options: {
+        translateTime: 'HH:MM:ss Z',
+        ignore: 'pid,hostname',
+      },
+    },
     serializers: {
       res (reply) {
         // The default
@@ -29,11 +36,11 @@ const fastify = require('fastify')({
 });
 const Autoload = require('@fastify/autoload');
 const path = require("path");
-const config = require('./src/config/config')
+const {config} = require('./src/config/config')
 
-const swagger = require('./src/config/swagger')
-fastify.register(require('@fastify/swagger'), swagger.options)
-fastify.register(require('@fastify/swagger-ui'), swagger.ui_options)
+const {options, ui_options} = require('./src/config/swagger')
+fastify.register(require('@fastify/swagger'), options)
+fastify.register(require('@fastify/swagger-ui'), ui_options)
 
 fastify.register(Autoload, {
   dir: path.join(__dirname, 'src/plugins')
@@ -44,8 +51,8 @@ fastify.register(Autoload, {
 
 
 // // console.log(config.mongoUri)
-mongoose.connect(config.config.mongoUri, { useNewUrlParser: true })
-    .then(() => console.log('MongoDB connected… => ', config.config.mongoUri))
+mongoose.connect(config.mongoUri, { useNewUrlParser: true })
+    .then(() => console.log('MongoDB connected… => ', config.mongoUri))
     .catch(err => console.log(err.message, "mongo URI => ", process.env.MONGO_URI))
 // Run the server!
 const start = async () => {
