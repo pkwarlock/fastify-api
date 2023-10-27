@@ -23,7 +23,7 @@ const getAdmin = async (request, reply) => {
     }
 }
 const getAllAdmin = async (request, reply) => {
-    // const admin = await Admin.find({ isDelete: false })
+    const {admin} = request.params
     reply.send(admin)
 }
 

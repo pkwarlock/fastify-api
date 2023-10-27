@@ -55,11 +55,11 @@ module.exports = async function (fastify) {
           }
         }
       },
-      // security: [
-      //   {
-      //     "authorization": []
-      //   }
-      // ]
+      security: [
+        {
+          "authorization": []
+        }
+      ]
     }
   })
 

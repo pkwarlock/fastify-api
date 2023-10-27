@@ -3,9 +3,6 @@ const mongoose = require('mongoose')
 const fastify = require('fastify')({
   logger: {
     level: 'info',
-    transport: {
-      target: 'pino-pretty'
-    },
     serializers: {
       res (reply) {
         // The default

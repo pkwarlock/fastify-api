@@ -14,7 +14,13 @@ const { HttpInstrumentation } = require('@opentelemetry/instrumentation-http');
 const { FastifyInstrumentation } = require('@opentelemetry/instrumentation-fastify');
 const { Resource } = require('@opentelemetry/resources');
 const { SemanticResourceAttributes } = require('@opentelemetry/semantic-conventions');
-
+const opentelemetry = require('@opentelemetry/sdk-node');
+const {
+  getNodeAutoInstrumentations,
+} = require('@opentelemetry/auto-instrumentations-node');
+const {
+  OTLPTraceExporter,
+} = require('@opentelemetry/exporter-trace-otlp-proto');
 
 const provider = new NodeTracerProvider({resource: new Resource({
   [SemanticResourceAttributes.SERVICE_NAME]: 'your-service-name',
@@ -22,13 +28,27 @@ const provider = new NodeTracerProvider({resource: new Resource({
 provider.register();
 
 fastify.addHook('onRequest', (request, reply, done) => {
-  registerInstrumentations({
+  const sdk = new opentelemetry.NodeSDK({
+    traceExporter: new OTLPTraceExporter({
+      // optional - default url is http://localhost:4318/v1/traces
+      url: '<your-otlp-endpoint>/v1/traces',
+      // optional - collection of custom headers to be sent with each request, empty by default
+      headers: {},
+    }),
+    
     instrumentations: [
-      // Fastify instrumentation expects HTTP layer to be instrumented
+      getNodeAutoInstrumentations(),
       new HttpInstrumentation(),
       new FastifyInstrumentation(),
     ],
   })
+  // registerInstrumentations({
+  //   instrumentations: [
+  //     // Fastify instrumentation expects HTTP layer to be instrumented
+      // new HttpInstrumentation(),
+      // new FastifyInstrumentation(),
+  //   ],
+  // })
   done()
 })
 })
