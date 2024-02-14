@@ -51,9 +51,9 @@ fastify.register(Autoload, {
 
 
 // // console.log(config.mongoUri)
-mongoose.connect(config.mongoUri, { useNewUrlParser: true })
-    .then(() => console.log('MongoDB connected… => ', config.mongoUri))
-    .catch(err => console.log(err.message, "mongo URI => ", process.env.MONGO_URI))
+// mongoose.connect(config.mongoUri, { useNewUrlParser: true })
+//     .then(() => console.log('MongoDB connected… => ', config.mongoUri))
+//     .catch(err => console.log(err.message, "mongo URI => ", process.env.MONGO_URI))
 // Run the server!
 const start = async () => {
   try {
